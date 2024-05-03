@@ -1,0 +1,11 @@
+WII-Nunchuck: https://www.makerblog.at/2016/01/wii-nunchuk-controller-am-arduino-teil-1/
+              https://learn.adafruit.com/adafruit-wii-nunchuck-breakout-adapter/arduino-use
+              https://github.com/madhephaestus/WiiChuck/blob/master/src/Nunchuck.h
+
+Adafruit-LED: https://adafruit.github.io/Adafruit_NeoPixel/html/class_adafruit___neo_pixel.html
+
+Musik       : https://www.hibit.dev/posts/62/playing-popular-songs-with-arduino-and-a-buzzer
+
+Arduino-REF : https://www.arduino.cc/reference/en/
+
+Multiplexer : https://wolles-elektronikkiste.de/tca9548a-i2c-multiplexer

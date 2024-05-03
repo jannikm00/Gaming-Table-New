@@ -1,0 +1,3 @@
+Burst Read Error: Programmierter Pin am Multiplexernicht Belegt
+                  Keine Verbindung zum Pull-Up Widerstand (10k Ohm)
+                  Verbindung am Controller Defekt/"Wakelkontakt"
