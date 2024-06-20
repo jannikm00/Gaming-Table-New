@@ -1,5 +1,6 @@
 #include <Adafruit_NeoPixel.h>
 #include <WiiChuck.h>
+#include <Wire.h>
 #include <pitches.h>
 #include "MusikVariablen.h"
 /*****************************************/
@@ -36,7 +37,6 @@ int melodyPin = 3;
 
 //**LAUFLICHT**//
 int n = 96;
-
 /***************************************/
 
 /***************************************/
@@ -44,24 +44,32 @@ int n = 96;
 //*Zusätzliche Musik Variablen*//
 
 int control_music = 0;
-int pauseBetweenNotes;
+float pauseBetweenNotes;
 int thisNote = 0;
-int pBN = 0.02; // wird von pauseBetweenNotes abgezogen simuliert ein delay, muss bei manchen Lieder evtl. Manuel eingegeben werden
-int change_music_in_home_screen_status = 2; //0:mario_them, 1:star_wars_theme, 2:pink_panther_theme, 3:pacman_theme, 4:doom_theme, 5:underworld_theme
+float pBN_mario = 8;
+float pBN_underworld = 8;
+float pBN_starwars = 8;
+float pBN_doom = 8;  // wird von pauseBetweenNotes abgezogen simuliert ein delay, muss bei manchen Lieder evtl. Manuel eingegeben werden
+float pBN_pacman = 8;
+float pBN_pinkpanther = 8;
+float pBN_simpson = 8;
+float pBN_tokyodrift = 8;
+int change_music_in_home_screen_status = 2;  //0:mario_them, 1:star_wars_theme, 2:pink_panther_theme, 3:pacman_theme, 4:doom_theme, 5:underworld_theme
 
 /**************************************/
 
 //**NUMMER DER LEDS UND TIMER FUNKTION FÜR STANDBY-MODUS**//
 int MAXLED = 2304;
 int long standby_Timer = 0;
-int long st = 3000;  // gibt an wann der standby-Modus beginnt nicht zu groß machen!!
-String god_mode = ""; //kann das Programmieren erleichtern, kann bestimmte funktionen ein und ausschalten
+int long st = 3000;      // gibt an wann der standby-Modus beginnt nicht zu groß machen!!
+String god_mode = "48";  //kann das Programmieren erleichtern, kann bestimmte funktionen ein und ausschalten
 
 /*************************************/
 
 //**VARIABLEN ZUR SPIEL AUSWAHL UND ZUM RESET**//
 int selct = 0;  // select muss zum start 0 sein, bis jetzt select 0 bis 6 belegt!!
 int select_input = 12;
+int Led_button_pin = 11;
 int x_one;
 int y_one;
 int x_two;
@@ -284,7 +292,7 @@ void setup() {
   nunchuck1.begin();
   nunchuck2.begin();
   nunchuck3.begin();
-  //nunchuck4.begin();
+  nunchuck4.begin();
   //Wenn die Automatische erkennung Fehlerhaft ist
   if (nunchuck1.type == Unknown) {
     nunchuck1.type = NUNCHUCK;
@@ -357,11 +365,13 @@ void start_program() {
     selct = 1000;  // select = 1000 hat keine funktion, verhindert nur das ungewollte aussteigen aus dem standby Modus
     runlight();
     reset();
+
   }
   if (selct == 0) {
     start_screen();
     easter_egg();
     reset();
+
   }
 }
 //
@@ -372,7 +382,7 @@ void reset() {
   //Mit CButton Auswahl quittieren
   //Wenn keine auswahl mit ZButton musik verändern
   if (easter_counter < 100) {
-    if (digital_input == 1 && selct != 0) {
+    if (digital_input == 0 && selct != 0) {
       for (int i = 0; i < MAXLED; i++) {
         led.setPixelColor(i, led.Color(0, 0, 0));
       }
@@ -381,6 +391,7 @@ void reset() {
       standby_Timer = 0;
     }
     if (selct == 0) {
+
       nunchuck1.readData();
       nunchuck2.readData();
       nunchuck3.readData();
@@ -494,7 +505,7 @@ void reset() {
           change_music_in_home_screen_status += 1;
           Serial.println(change_music_in_home_screen_status);
         }
-        if (change_music_in_home_screen_status > 6) { //Der vergleichs wert musss je nachdem wie viele Lieder im Program sind verändert werden, er sollte der Anzahl der programierten Lieder entsprechen
+        if (change_music_in_home_screen_status > 6) {  //Der vergleichs wert musss je nachdem wie viele Lieder im Program sind verändert werden, er sollte der Anzahl der programierten Lieder entsprechen
           change_music_in_home_screen_status = 0;
         }
       }
@@ -2487,7 +2498,7 @@ void mario_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_mario;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2508,7 +2519,7 @@ void underworld_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_underworld;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2529,7 +2540,7 @@ void star_wars_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_starwars;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2550,7 +2561,7 @@ void doom_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_doom;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2571,7 +2582,7 @@ void pacman_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_pacman;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2592,7 +2603,7 @@ void pink_panther_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_pinkpanther;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2613,7 +2624,7 @@ void simpson_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_simpson;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2634,7 +2645,7 @@ void Tokyo_Drift_theme() {
     thisNote++;
   }
   if (control_music == 1) {
-    pauseBetweenNotes -= pBN;
+    pauseBetweenNotes -= pBN_tokyodrift;
     if (pauseBetweenNotes <= 0) {
       control_music = 0;
       noTone(melodyPin);
@@ -2692,36 +2703,46 @@ void dev_made_easy() {
   //Alle commands werden im Serial Monitor eingegeben
   if (Serial.available()) {
     god_mode = Serial.read();
-    Serial.println(god_mode); // Gibt die zugehörige zahl zum Zeichen aus
+    Serial.println(god_mode);  // Gibt die zugehörige zahl zum Zeichen aus
   }
   if (god_mode.equals("48")) {
     selct = 0;  //0 , startet den Home Bildschirm
     for (int i = 0; i < MAXLED; i++) { led.setPixelColor(i, led.Color(0, 0, 0)); }
   }
-  if (god_mode.equals("49")) { selct = 1; }             //1 , startet spiel eins RACE GAME
-  if (god_mode.equals("50")) { selct = 2; }             //2 , startet spiel zwei TIC TAC TOE
-  if (god_mode.equals("51")) { selct = 3; }             //3 , startet spiel drei COIN COLLECT
-  if (god_mode.equals("52")) { selct = 4; }             //4 , startet spiel vier JUMP AND RUN
-  if (god_mode.equals("53")) { selct = 5; }             //5 , startet spiel fünf STOP AND GO
+  if (god_mode.equals("49")) { selct = 1; }              //1 , startet spiel eins RACE GAME
+  if (god_mode.equals("50")) { selct = 2; }              //2 , startet spiel zwei TIC TAC TOE
+  if (god_mode.equals("51")) { selct = 3; }              //3 , startet spiel drei COIN COLLECT
+  if (god_mode.equals("52")) { selct = 4; }              //4 , startet spiel vier JUMP AND RUN
+  if (god_mode.equals("53")) { selct = 5; }              //5 , startet spiel fünf STOP AND GO
   if (god_mode.equals("101")) { easter_counter = 101; }  //e ,zeigt das easter egg
   if (god_mode.equals("113")) { standby_Timer = 3001; }  //q , startet den Standby Modus
 }
 
+void Led_button() {
+  if (selct == 0) {
+    analogWrite(Led_button_pin, 255);
+  }
+  else if(standby_Timer > 3000){
+    analogWrite(Led_button_pin, 50);
+  }
 
+}
 
 //Ruft alle Haupt funktionen auf und erhöht die variable des standby_Timer (diese funktioniert auch innerhalb von Spielen wenn nichts gedrückt wird)
 //Loop wird genau wie Setup in jedem Programm benötigt
 //void loop wird AUTOMATISCH immer wieder aufgerufen
 void loop() {
+  Led_button();
   start_program();
   reset();
-  //dev_made_easy();
-  select_music(); 
+  dev_made_easy();
+  select_music();
   game_ONE_LED_RACE();
   game_TWO_TIC_TAC_TOE();
   game_COIN_COLLECT();
   game_JUMP_AND_RUN();
   game_STOP_AND_GO();
   standby_Timer++;
+  Serial.println("LETS GO");
   Serial.println(selct);
 }
