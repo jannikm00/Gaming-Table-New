@@ -1,8 +1,10 @@
 #include <Adafruit_NeoPixel.h>
 #include <WiiChuck.h>
 #include <Wire.h>
+/*
 #include <pitches.h>
-#include "MusikVariablen.h"
+#include "MusikVariablen.h"*/
+
 /*****************************************/
 /*****************************************/
 //**********GLOBALE VARIABLEN************//
@@ -42,7 +44,7 @@ int n = 96;
 /***************************************/
 
 //*Zusätzliche Musik Variablen*//
-
+/*
 int control_music = 0;
 float pauseBetweenNotes;
 int thisNote = 0;
@@ -53,22 +55,22 @@ float pBN_doom = 8;  // wird von pauseBetweenNotes abgezogen simuliert ein delay
 float pBN_pacman = 8;
 float pBN_pinkpanther = 8;
 float pBN_simpson = 8;
-float pBN_tokyodrift = 8;
+float pBN_tokyodrift = 8;*/
 int change_music_in_home_screen_status = 2;  //0:mario_them, 1:star_wars_theme, 2:pink_panther_theme, 3:pacman_theme, 4:doom_theme, 5:underworld_theme
 
 /**************************************/
 
 //**NUMMER DER LEDS UND TIMER FUNKTION FÜR STANDBY-MODUS**//
 int MAXLED = 2304;
-int long standby_Timer = 0;
-int long st = 3000;      // gibt an wann der standby-Modus beginnt nicht zu groß machen!!
-String god_mode = "48";  //kann das Programmieren erleichtern, kann bestimmte funktionen ein und ausschalten
+int standby_Timer = 0;
+int st = 3000;  // gibt an wann der standby-Modus beginnt nicht zu groß machen!!
+//String god_mode = "";  //kann das Programmieren erleichtern, kann bestimmte funktionen ein und ausschalten
 
 /*************************************/
 
 //**VARIABLEN ZUR SPIEL AUSWAHL UND ZUM RESET**//
 int selct = 0;  // select muss zum start 0 sein, bis jetzt select 0 bis 6 belegt!!
-int select_input = 12;
+int select_input = 8;
 int Led_button_pin = 11;
 int x_one;
 int y_one;
@@ -89,7 +91,6 @@ int courser_on_STOP_AND_GO = false;
 int TBEEP = 3;
 
 int run = 0;
-
 float speed1 = 0;
 float speed2 = 0;
 float speed3 = 0;
@@ -115,11 +116,9 @@ byte flag_sw2 = 0;
 byte flag_sw3 = 0;
 byte flag_sw4 = 0;
 byte draworder = 0;
-
 unsigned long timestamp = 0;
 int tdelay = 1;
 int race_win_delay = 1000;
-
 
 /******************************/
 
@@ -195,6 +194,7 @@ int dotnew = 10;
 /*****************************/
 
 //**JUMP AND RUN**//
+
 bool new_block = true;
 int ran_num = 0;
 int led_row1 = 0;
@@ -234,6 +234,7 @@ int blackout_count = 0;
 /****************************/
 
 //**SQUID GAME**//
+
 int ran_timer1 = 0;
 int ran_timer2 = 0;
 int ran_timer3 = 0;
@@ -267,21 +268,28 @@ int move_speed = 3;
 int easter_counter = 0;
 
 
-Adafruit_NeoPixel led(MAXLED, LED_PIN, NEO_GRB + NEO_KHZ800);  // Wird benötigt um die Adafruit Library (#include <Adafruit_NeoPixel.h>) zu benutzen...https://adafruit.github.io/Adafruit_NeoPixel/html/class_adafruit___neo_pixel.html
+Adafruit_NeoPixel led(MAXLED, 6, NEO_GRB + NEO_KHZ800);  // Wird benötigt um die Adafruit Library (#include <Adafruit_NeoPixel.h>) zu benutzen...https://adafruit.github.io/Adafruit_NeoPixel/html/class_adafruit___neo_pixel.html
 
 
 /****************************/
 //Setup aller input und Output Pins des Arduinos
 void setup() {
-  Serial.begin(9600);
+  Wire.begin(9);
+  Serial.begin(115200);
   led.begin();
   for (int i = 0; i < MAXLED; i++) {
     led.setPixelColor(i, led.Color(0, 0, 0));
   }
   led.show();
-  pinMode(select_input, INPUT_PULLUP);
+  while (digitalRead(select_input) == 1) {
+    for (int i = 0; i < MAXLED; i++) {
+      led.setPixelColor(i, led.Color(100, 100, 100));
+      digitalRead(select_input);
+    }
+    led.show();
+  }
   pinMode(melodyPin, OUTPUT);
-  randomSeed(analogRead(A11));
+  randomSeed(analogRead(A0));
   led.setBrightness(brght);
   //Zur Port auswahl am Arduino/Multiplexer
   nunchuck1.addMultiplexer(0x70, 0);
@@ -294,6 +302,7 @@ void setup() {
   nunchuck3.begin();
   nunchuck4.begin();
   //Wenn die Automatische erkennung Fehlerhaft ist
+
   if (nunchuck1.type == Unknown) {
     nunchuck1.type = NUNCHUCK;
   }
@@ -362,19 +371,20 @@ void start_screen() {
 //RUFT STANDBY BILDSCHIRM, SOWIE RESET UND DEN START BILDSCHIRM//
 void start_program() {
   if (standby_Timer > st) {
+    Serial.println(F("Void start programm ausführen"));
     selct = 1000;  // select = 1000 hat keine funktion, verhindert nur das ungewollte aussteigen aus dem standby Modus
     runlight();
     reset();
-
   }
   if (selct == 0) {
+    Serial.println(F("Hauptbildschirm wird angezeigt"));
+
     start_screen();
     easter_egg();
     reset();
-
   }
 }
-//
+
 
 //SPIELAUSWAHL UND ZURÜCK ZUM START BILDSCHIRM//
 void reset() {
@@ -391,7 +401,6 @@ void reset() {
       standby_Timer = 0;
     }
     if (selct == 0) {
-
       nunchuck1.readData();
       nunchuck2.readData();
       nunchuck3.readData();
@@ -536,7 +545,7 @@ void runlight() {
   }
   easter_counter = 0;
 }
-//
+
 
 
 //RACE GAME FUNKTIONEN ZUM ANZEIGEN DER SPIELER POSITIONEN//
@@ -657,13 +666,14 @@ void check_win_tic_tac_toe() {
   }
   if (player_o_win) {
     for (int i = 0; i < MAXLED; i++) {
-      led.setPixelColor(i, led.Color(0, 0, 0));
-    }
-    for (int i = 0; i < MAXLED; i++) {
       if (i == 1410 || i == 1362 || i == 1314 || i == 1266 || i == 1218 || i == 1170 || i == 1122 || i == 1074 || i == 1026 || i == 978 || i == 930 || i == 1469 || i == 1468 || i == 1467 || i == 1466 || i == 1465 || i == 1464 || i == 1463 || i == 1462 || i == 1461 || i == 1460 || i == 1459 || i == 1422 || i == 1374 || i == 1326 || i == 1278 || i == 1230 || i == 1182 || i == 1134 || i == 1086 || i == 1038 || i == 990 || i == 942 || i == 893 || i == 892 || i == 891 || i == 890 || i == 889 || i == 888 || i == 887 || i == 886 || i == 885 || i == 884 || i == 883) {
         led.setPixelColor(i, led.Color(0, 0, 255));
       }
     }
+    for (int i = 0; i < MAXLED; i++) {
+      led.setPixelColor(i, led.Color(0, 0, 0));
+    }
+
     led.show();
     player_o_win = false;
     ttt_start = 0;
@@ -1200,6 +1210,7 @@ void check_win_coin_collect() {
 
 
 void game_ONE_LED_RACE() {
+
   if (selct == 1) {
     //Start Sequenz
     if (run == 0) {
@@ -1905,7 +1916,6 @@ void win_JUMP_AND_RUN() {
   }
 }
 
-
 void game_JUMP_AND_RUN() {
   if (selct == 4) {
     easter_counter = 0;
@@ -2090,8 +2100,8 @@ void game_JUMP_AND_RUN() {
         }
       }
       led_row5 = led_row5 + row_move_speed;
-    }*/
-
+    }
+*/
     //Entscheidet wann eine neue Block reihe erzeugt wird (row_speed ist dafür entscheident -> desto kleiner rwo_speed desto schneller)
     if (num_of_total_rows >= 1) {
       if (counter_new_row >= row_speed) {
@@ -2487,218 +2497,9 @@ void easter_egg() {  //Credits
 }
 
 
-//Soundeffekt funktionen
-void mario_theme() {
-  int size = sizeof(melody) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, melody[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_mario;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-void underworld_theme() {
-  int size = sizeof(underworld_melody) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / underworld_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, underworld_melody[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_underworld;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-void star_wars_theme() {
-  int size = sizeof(melody_st) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / tempo_st[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, melody_st[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_starwars;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-void doom_theme() {
-  int size = sizeof(doom_melody) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / doom_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, doom_melody[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_doom;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-void pacman_theme() {
-  int size = sizeof(pacman_melody) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / pacman_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, pacman_melody[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_pacman;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-void pink_panther_theme() {
-  int size = sizeof(pinkpanther_melody) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / pinkpanther_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, pinkpanther_melody[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_pinkpanther;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-void simpson_theme() {
-  int size = sizeof(simpson_melody) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / simpson_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, simpson_melody[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_simpson;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-void Tokyo_Drift_theme() {
-  int size = sizeof(Tokyo_Drift_melody) / sizeof(int);
-  if (thisNote < size && control_music == 0) {
-    int noteDuration = 1000 / TD_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
-    tone(melodyPin, Tokyo_Drift_melody[thisNote], noteDuration);
-    control_music = 1;
-    thisNote++;
-  }
-  if (control_music == 1) {
-    pauseBetweenNotes -= pBN_tokyodrift;
-    if (pauseBetweenNotes <= 0) {
-      control_music = 0;
-      noTone(melodyPin);
-    }
-  }
-  if (thisNote >= size) {
-    thisNote = 0;
-  }
-}
-
-//Aufrufen der verschiedenen sounds //Soundeffekt funktionen
-//https://www.hibit.dev/posts/62/playing-popular-songs-with-arduino-and-a-buzzer
-void select_music() {
-  //Title Musik
-  if (selct == 0 && change_music_in_home_screen_status == 0) {
-    mario_theme();
-  }
-  //Race Game Musik
-  if (selct == 1 || selct == 0 && change_music_in_home_screen_status == 1) {
-    star_wars_theme();
-  }
-  //Tic Tac Toe Musik
-  if (selct == 2 || selct == 0 && change_music_in_home_screen_status == 2) {
-    pink_panther_theme();
-  }
-  //Collect Coin Musik
-  if (selct == 3 || selct == 0 && change_music_in_home_screen_status == 3) {
-    pacman_theme();
-  }
-  //Jump and Run Musik
-  if (selct == 4 || selct == 0 && change_music_in_home_screen_status == 4) {
-    doom_theme();
-  }
-  //Stop and Go Musik
-  if (selct == 5 || selct == 0 && change_music_in_home_screen_status == 5) {
-    underworld_theme();
-  }
-  //platzhalter für andere Spiele
-  if (selct == 6 || selct == 0 && change_music_in_home_screen_status == 6) {
-    Tokyo_Drift_theme();
-  }
-  if (selct == 7 || selct == 0 && change_music_in_home_screen_status == 7) {
-  }
-  if (selct == 8 || selct == 0 && change_music_in_home_screen_status == 8) {
-  }
-  if (selct == 9 || selct == 0 && change_music_in_home_screen_status == 9) {
-  }
-  //Easter Egg Musik
-  if (easter_counter > 100) {
-  }
-}
 
 //Nicht Kompatible Mit Arduino GIGA!!!!
+/*
 void dev_made_easy() {
   //Alle commands werden im Serial Monitor eingegeben
   if (Serial.available()) {
@@ -2717,32 +2518,62 @@ void dev_made_easy() {
   if (god_mode.equals("101")) { easter_counter = 101; }  //e ,zeigt das easter egg
   if (god_mode.equals("113")) { standby_Timer = 3001; }  //q , startet den Standby Modus
 }
-
+*/
 void Led_button() {
   if (selct == 0) {
     analogWrite(Led_button_pin, 255);
-  }
-  else if(standby_Timer > 3000){
+  } else if (standby_Timer > 3000) {
     analogWrite(Led_button_pin, 50);
   }
-
 }
+
+
+
+void wire() {                 //Slave Kommunikation per I²C
+  Wire.beginTransmission(9);  //Adresse 9 auf Bus
+  Wire.write(selct);
+  Wire.endTransmission();
+  if (easter_counter > 100) {
+    Wire.beginTransmission(9);
+    Wire.write("easter_egg");
+    Wire.endTransmission();
+  }
+}
+
 
 //Ruft alle Haupt funktionen auf und erhöht die variable des standby_Timer (diese funktioniert auch innerhalb von Spielen wenn nichts gedrückt wird)
 //Loop wird genau wie Setup in jedem Programm benötigt
 //void loop wird AUTOMATISCH immer wieder aufgerufen
 void loop() {
+  Serial.write("Free SRAM:");
+  Serial.println(availableMemory());
+  wire();
   Led_button();
   start_program();
   reset();
-  dev_made_easy();
-  select_music();
+  //dev_made_easy();
+  //select_music();
   game_ONE_LED_RACE();
   game_TWO_TIC_TAC_TOE();
   game_COIN_COLLECT();
-  game_JUMP_AND_RUN();
+  //game_JUMP_AND_RUN();
   game_STOP_AND_GO();
   standby_Timer++;
-  Serial.println("LETS GO");
-  Serial.println(selct);
+  //Serial.println("LETS GO");
+  //Serial.println(selct);
+  //Serial.println(easter_counter);
+  easter_egg();
+}
+
+
+
+// free RAM check for debugging. SRAM for ATmega328p = 2048Kb.
+int availableMemory() {
+  // Use 1024 with ATmega168
+  int size = 8192;
+  byte *buf;
+  while ((buf = (byte *)malloc(--size)) == NULL)
+    ;
+  free(buf);
+  return size;
 }
