@@ -280,7 +280,8 @@ void setup() {
   for (int i = 0; i < MAXLED; i++) {
     led.setPixelColor(i, led.Color(0, 0, 0));
   }
-  led.show(); /*
+  led.show();
+  /*
    while (digitalRead(select_input) == 1) {
     for (int i = 0; i < MAXLED; i++) {
       led.setPixelColor(i, led.Color(100, 100, 100));
@@ -360,7 +361,9 @@ void start_screen() {
     }
   }
   for (int i = 0; i < MAXLED; i++) {  //Home blauer Regenschirm
-    if (i == 1532 || i == 1484 || i == 1435 || i == 1434 || i == 1481 || i == 1529 || i == 1577 || i == 1625 || i == 1673 || i == 1721 || i == 1769 || i == 1817 || i == 1866 || i == 1819 || i == 1820 || i == 1869 || i == 1822 || i == 1870 || i == 1918 || i == 1965 || i == 2012 || i == 2059 || i == 2058 || i == 2057 || i == 2056 || i == 2055 || i == 2006 || i == 1957 || i == 1908 || i == 1860 || i == 1812 || i == 1861 || i == 1814 || i == 1815 || i == 1864) {
+                                      //if (i == 1532 || i == 1484 || i == 1435 || i == 1434 || i == 1481 || i == 1529 || i == 1577 || i == 1625 || i == 1673 || i == 1721 || i == 1769 || i == 1817 || i == 1866 || i == 1819 || i == 1820 || i == 1869 || i == 1822 || i == 1870 || i == 1918 || i == 1965 || i == 2012 || i == 2059 || i == 2058 || i == 2057 || i == 2056 || i == 2055 || i == 2006 || i == 1957 || i == 1908 || i == 1860 || i == 1812 || i == 1861 || i == 1814 || i == 1815 || i == 1864) {
+    if (i == 825 || i == 777 || i == 728 || i == 774 || i == 822 || i == 870 || i == 918 || i == 966 || i == 1014 || i == 1062 || i == 1110 || i == 1157 || i == 1108 || i == 1107 || i == 1154 || i == 1105 || i == 1153 || i == 1201 || i == 1250 || i == 1299 || i == 1348 || i == 1349 || i == 1350 || i == 1351 || i == 1352 || i == 1305 || i == 1258 || i == 1211 || i == 1163 || i == 1162 || i == 1115 || i == 1113 || i == 1112 || i == 1159) {
+
       led.setPixelColor(i - 1, led.Color(0, 0, 255));
     }
   }
@@ -484,19 +487,36 @@ void reset() {
       }*/
       //STOP AND GO//
       //überprüfen
-      if (y_one >= 220 && x_one <= 15 && x_one >= 1 || y_two >= 220 && x_two <= 15 && x_two >= 1 || y_three >= 220 && x_three <= 15 && x_three >= 1 || y_four >= 220 && x_four <= 15 && x_four >= 1 || courser_on_STOP_AND_GO) {
+      // if (y_one >= 220 && x_one <= 15 && x_one >= 1 || y_two >= 220 && x_two <= 15 && x_two >= 1 || y_three >= 220 && x_three <= 15 && x_three >= 1 || y_four >= 220 && x_four <= 15 && x_four >= 1 || courser_on_STOP_AND_GO) {
+      if (x_one == 255 || x_two == 255 || x_three == 255 || x_four == 255 || courser_on_STOP_AND_GO) {
         courser_on_TIC_TAC_TOE = false;
         courser_on_RACE_GAME = false;
         courser_on_COIN_GAME = false;
         courser_on_JUMP_AND_RUN = false;
         courser_on_STOP_AND_GO = true;
         for (int i = 0; i < MAXLED; i++) {
-          if (i == 1532 || i == 1484 || i == 1435 || i == 1434 || i == 1481 || i == 1529 || i == 1577 || i == 1625 || i == 1673 || i == 1721 || i == 1769 || i == 1817 || i == 1866 || i == 1819 || i == 1820 || i == 1869 || i == 1822 || i == 1870 || i == 1918 || i == 1965 || i == 2012 || i == 2059 || i == 2058 || i == 2057 || i == 2056 || i == 2055 || i == 2006 || i == 1957 || i == 1908 || i == 1860 || i == 1812 || i == 1861 || i == 1814 || i == 1815 || i == 1864) {
-            led.setPixelColor(i, led.Color(0, 0, 0));
+          //if (i == 1532 || i == 1484 || i == 1435 || i == 1434 || i == 1481 || i == 1529 || i == 1577 || i == 1625 || i == 1673 || i == 1721 || i == 1769 || i == 1817 || i == 1866 || i == 1819 || i == 1820 || i == 1869 || i == 1822 || i == 1870 || i == 1918 || i == 1965 || i == 2012 || i == 2059 || i == 2058 || i == 2057 || i == 2056 || i == 2055 || i == 2006 || i == 1957 || i == 1908 || i == 1860 || i == 1812 || i == 1861 || i == 1814 || i == 1815 || i == 1864) {
+          if (i == 1355 || i == 1354 || i == 1353 || i == 1352 || i == 1351 || i == 1350 || i == 1349 || i == 1348 || i == 1347 || i == 1346 || i == 1345
+              || i == 1307 || i == 1306 || i == 1305 || i == 1304 || i == 1303 || i == 1302 || i == 1301 || i == 1300 || i == 1299 || i == 1298 || i == 1297
+              || i == 1259 || i == 1258 || i == 1257 || i == 1256 || i == 1255 || i == 1254 || i == 1253 || i == 1252 || i == 1251 || i == 1250 || i == 1249
+              || i == 1211 || i == 1210 || i == 1209 || i == 1208 || i == 1207 || i == 1206 || i == 1205 || i == 1204 || i == 1203 || i == 1202 || i == 1201
+              || i == 1163 || i == 1162 || i == 1161 || i == 1160 || i == 1159 || i == 1158 || i == 1157 || i == 1156 || i == 1155 || i == 1154 || i == 1153
+              || i == 1115 || i == 1114 || i == 1113 || i == 1112 || i == 1111 || i == 1110 || i == 1109 || i == 1108 || i == 1107 || i == 1106 || i == 1105
+              || i == 1067 || i == 1066 || i == 1065 || i == 1064 || i == 1063 || i == 1062 || i == 1061 || i == 1060 || i == 1059 || i == 1058 || i == 1057
+              || i == 1019 || i == 1018 || i == 1017 || i == 1016 || i == 1015 || i == 1014 || i == 1013 || i == 1012 || i == 1011 || i == 1010 || i == 1009
+              || i == 971 || i == 970 || i == 969 || i == 968 || i == 967 || i == 966 || i == 965 || i == 964 || i == 963 || i == 962 || i == 961
+              || i == 923 || i == 922 || i == 921 || i == 920 || i == 919 || i == 918 || i == 917 || i == 916 || i == 915 || i == 914 || i == 913
+              || i == 875 || i == 874 || i == 873 || i == 872 || i == 871 || i == 870 || i == 869 || i == 868 || i == 867 || i == 866 || i == 865
+              || i == 827 || i == 826 || i == 825 || i == 824 || i == 823 || i == 822 || i == 821 || i == 820 || i == 819 || i == 818 || i == 817
+              || i == 779 || i == 778 || i == 777 || i == 776 || i == 775 || i == 774 || i == 773 || i == 772 || i == 771 || i == 770 || i == 769
+              || i == 731 || i == 730 || i == 729 || i == 728 || i == 727 || i == 726 || i == 725 || i == 724 || i == 723 || i == 722 || i == 721) {
+            led.setPixelColor(i - 2, led.Color(0, 0, 0));
+            led.setPixelColor(i -1, led.Color(0, 0, 0));
           }
         }
         led.show();
-        if (nunchuck1.getButtonZ() == 1 || nunchuck2.getButtonZ() == 1) {
+
+        if (nunchuck1.getButtonZ() == 1 || nunchuck2.getButtonZ() == 1 || nunchuck3.getButtonZ() == 1 || nunchuck4.getButtonZ() == 1) {
           selct = 5;
           standby_Timer = 0;
         }
@@ -1125,14 +1145,14 @@ void check_pos() {
   {
     n4 = n4 + 1;
   }
-  if (nunchuck2.getJoyY() > 180)  //player 4 up
+  if (nunchuck4.getJoyY() > 180)  //player 4 up
   {
     n4 = n4 + 48;
     if (n4 > MAXLED) {
       n4 -= MAXLED;
     }
   }
-  if (nunchuck2.getJoyY() < 80)  //player 4 down
+  if (nunchuck4.getJoyY() < 80)  //player 4 down
   {
     n4 = n4 - 48;
     if (n4 < -96) {
@@ -2529,11 +2549,13 @@ void Led_button() {
 
 
 
-void wire() {                 //Slave Kommunikation per I²C
-  Wire.beginTransmission(9);  //Adresse 9 auf Bus
-  Wire.write(selct);
-  Wire.endTransmission();
-  if (easter_counter > 100) {
+void wire() {  //Slave Kommunikation per I²C
+  if (easter_counter < 100) {
+    Wire.beginTransmission(9);  //Adresse 9 auf Bus
+    Wire.write(selct);
+    Wire.endTransmission();
+  }
+  if (easter_counter >= 100) {
     Wire.beginTransmission(9);
     Wire.write("easter_egg");
     Wire.endTransmission();
@@ -2545,9 +2567,9 @@ void wire() {                 //Slave Kommunikation per I²C
 //Loop wird genau wie Setup in jedem Programm benötigt
 //void loop wird AUTOMATISCH immer wieder aufgerufen
 void loop() {
-  wire(); //Kommunikation mit Slave Arduino welcher die Musik steuert
-  Led_button(); //Beleuchtung des Home buttons
-  start_program(); 
+  wire();        //Kommunikation mit Slave Arduino welcher die Musik steuert
+  Led_button();  //Beleuchtung des Home buttons
+  start_program();
   reset();
   /*###############Funktionen entfernt wegen unzureichendem SRAM auf dem Arduino##################
   dev_made_easy();
