@@ -68,7 +68,7 @@ void select_music() {
     underworld_theme();
   }
   //platzhalter für andere Spiele
-  /*
+  
   if (selct == 6 || selct == 0 && change_music_in_home_screen_status == 6) {
     Tokyo_Drift_theme();
   }
@@ -79,9 +79,9 @@ void select_music() {
   if (selct == 9 || selct == 0 && change_music_in_home_screen_status == 9) {
   }
   //Easter Egg Musik
-  if (selct == 1000 > 100) {
+  if (selct == "easter_egg") {
     pacman_theme();
-  }*/
+  }
 }
 
 void mario_theme() {
@@ -146,7 +146,7 @@ void star_wars_theme() {
     thisNote = 0;
   }
 }
-/*
+
 void doom_theme() {
   int size = sizeof(doom_melody) / sizeof(int);
   if (thisNote < size && control_music == 0) {
@@ -167,7 +167,7 @@ void doom_theme() {
     thisNote = 0;
   }
 }
-*/
+
 void pacman_theme() {
   int size = sizeof(pacman_melody) / sizeof(int);
   if (thisNote < size && control_music == 0) {
@@ -188,7 +188,7 @@ void pacman_theme() {
     thisNote = 0;
   }
 }
-/*
+
 void pink_panther_theme() {
   int size = sizeof(pinkpanther_melody) / sizeof(int);
   if (thisNote < size && control_music == 0) {
@@ -250,4 +250,4 @@ void Tokyo_Drift_theme() {
   if (thisNote >= size) {
     thisNote = 0;
   }
-}*/
+}
