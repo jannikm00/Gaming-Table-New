@@ -275,19 +275,19 @@ Adafruit_NeoPixel led(MAXLED, 6, NEO_GRB + NEO_KHZ800);  // Wird benötigt um di
 //Setup aller input und Output Pins des Arduinos
 void setup() {
   Wire.begin(9);
-  Serial.begin(115200);
+  Serial.begin(9600);
   led.begin();
   for (int i = 0; i < MAXLED; i++) {
     led.setPixelColor(i, led.Color(0, 0, 0));
   }
-  led.show();
-  while (digitalRead(select_input) == 1) {
+  led.show(); /*
+   while (digitalRead(select_input) == 1) {
     for (int i = 0; i < MAXLED; i++) {
       led.setPixelColor(i, led.Color(100, 100, 100));
       digitalRead(select_input);
     }
     led.show();
-  }
+  }*/
   pinMode(melodyPin, OUTPUT);
   randomSeed(analogRead(A0));
   led.setBrightness(brght);
@@ -319,13 +319,13 @@ void setup() {
 
 
 void start_screen() {
-  for (int i = 0; i < MAXLED; i++) {  //Home Rot
-    if (i == 1064 || i == 1281 || i == 1263 || i == 268 || i == 1988 || i == 1939 || i == 1892 || i == 1941 || i == 1033 || i == 1032 || i == 1031 || i == 985 || i == 984 || i == 983 || i == 937 || i == 936 || i == 935 || i == 889 || i == 888 || i == 887 || i == 841 || i == 840 || i == 839 || i == 793 || i == 792 || i == 791 || i == 744 || i == 696 || i == 648 || i == 1178 || i == 1177 || i == 1176 || i == 1175 || i == 1174 || i == 1130 || i == 1129 || i == 1128 || i == 1127 || i == 1126 || i == 1082 || i == 1081 || i == 1080 || i == 1079 || i == 1078 || i == 1271 || i == 1270 || i == 1223 || i == 1222 || i == 1274 || i == 1273 || i == 1226 || i == 1225 || i == 1323 || i == 1322 || i == 1318 || i == 1317 || i == 1269 || i == 1268 || i == 1267 || i == 1277 || i == 1276 || i == 1275 || i == 1233 || i == 1232 || i == 1231 || i == 1230 || i == 1229 || i == 1219 || i == 1218 || i == 1217 || i == 1216 || i == 1215 || i == 1184 || i == 1183 || i == 1135 || i == 1169 || i == 1168 || i == 1121 || i == 1329 || i == 1328 || i == 1376 || i == 1375 || i == 1374 || i == 1422 || i == 1421 || i == 1420 || i == 1419 || i == 1418 || i == 1417 || i == 1416 || i == 1415 || i == 1414 || i == 1413 || i == 1412 || i == 1411 || i == 1410 || i == 1362 || i == 1361 || i == 1360 || i == 1312 || i == 1311 || i == 1467 || i == 1466 || i == 1465 || i == 1464 || i == 1463 || i == 1462 || i == 1461) {
+  for (int i = 0; i < MAXLED; i++) {  //Home Rot Gelöscht : i == 1064
+    if (i == 1281 || i == 1263 || i == 268 || i == 1988 || i == 1939 || i == 1892 || i == 1941 || i == 1033 || i == 1032 || i == 1031 || i == 985 || i == 984 || i == 983 || i == 937 || i == 936 || i == 935 || i == 889 || i == 888 || i == 887 || i == 841 || i == 840 || i == 839 || i == 793 || i == 792 || i == 791 || i == 744 || i == 696 || i == 648 || i == 1178 || i == 1177 || i == 1176 || i == 1175 || i == 1174 || i == 1130 || i == 1129 || i == 1128 || i == 1127 || i == 1126 || i == 1082 || i == 1081 || i == 1080 || i == 1079 || i == 1078 || i == 1271 || i == 1270 || i == 1223 || i == 1222 || i == 1274 || i == 1273 || i == 1226 || i == 1225 || i == 1323 || i == 1322 || i == 1318 || i == 1317 || i == 1269 || i == 1268 || i == 1267 || i == 1277 || i == 1276 || i == 1275 || i == 1233 || i == 1232 || i == 1231 || i == 1230 || i == 1229 || i == 1219 || i == 1218 || i == 1217 || i == 1216 || i == 1215 || i == 1184 || i == 1183 || i == 1135 || i == 1169 || i == 1168 || i == 1121 || i == 1329 || i == 1328 || i == 1376 || i == 1375 || i == 1374 || i == 1422 || i == 1421 || i == 1420 || i == 1419 || i == 1418 || i == 1417 || i == 1416 || i == 1415 || i == 1414 || i == 1413 || i == 1412 || i == 1411 || i == 1410 || i == 1362 || i == 1361 || i == 1360 || i == 1312 || i == 1311 || i == 1467 || i == 1466 || i == 1465 || i == 1464 || i == 1463 || i == 1462 || i == 1461) {
       led.setPixelColor(i - 1, led.Color(255, 0, 0));
     }
   }
-  for (int i = 0; i < MAXLED; i++) {  //Home Weiß
-    if (i == 1208 || i == 1207 || i == 1206 || i == 1205 || i == 1204 || i == 1203 || i == 1202 || i == 1157 || i == 1109 || i == 1107 || i == 1059 || i == 1016 || i == 1015 || i == 1014 || i == 1013 || i == 1012 || i == 1011 || i == 1010 || i == 2045 || i == 2044 || i == 2043 || i == 2042 || i == 2041 || i == 2040 || i == 2039 || i == 2038 || i == 2037 || i == 2036 || i == 2035 || i == 1853 || i == 1852 || i == 1851 || i == 1850 || i == 1849 || i == 1848 || i == 1847 || i == 1846 || i == 1845 || i == 1844 || i == 1843 || i == 1994 || i == 1946 || i == 1898 || i == 1990 || i == 1942 || i == 1894 || i == 1798 || i == 1750 || i == 1702 || i == 1802 || i == 1754 || i == 1706 || i == 2182 || i == 2134 || i == 2086 || i == 2186 || i == 2138 || i == 2090 || i == 79 || i == 78 || i == 77 || i == 76 || i == 75 || i == 74 || i == 73 || i == 72 || i == 71 || i == 70 || i == 69 || i == 68 || i == 67 || i == 66 || i == 65 || i == 64 || i == 63 || i == 62 || i == 163 || i == 162 || i == 115 || i == 114 || i == 167 || i == 166 || i == 119 || i == 118) {
+  for (int i = 0; i < MAXLED; i++) {  //Home Weiß Gelöscht : (i == 1208 || i == 1207 || i == 1206 || i == 1205 || i == 1204 || i == 1203 || i == 1202 || i == 1157 || i == 1109 || i == 1107 || i == 1059 || i == 1016 || i == 1015 || i == 1014 || i == 1013 || i == 1012 || i == 1011 || i == 1010
+    if (i == 2045 || i == 2044 || i == 2043 || i == 2042 || i == 2041 || i == 2040 || i == 2039 || i == 2038 || i == 2037 || i == 2036 || i == 2035 || i == 1853 || i == 1852 || i == 1851 || i == 1850 || i == 1849 || i == 1848 || i == 1847 || i == 1846 || i == 1845 || i == 1844 || i == 1843 || i == 1994 || i == 1946 || i == 1898 || i == 1990 || i == 1942 || i == 1894 || i == 1798 || i == 1750 || i == 1702 || i == 1802 || i == 1754 || i == 1706 || i == 2182 || i == 2134 || i == 2086 || i == 2186 || i == 2138 || i == 2090 || i == 79 || i == 78 || i == 77 || i == 76 || i == 75 || i == 74 || i == 73 || i == 72 || i == 71 || i == 70 || i == 69 || i == 68 || i == 67 || i == 66 || i == 65 || i == 64 || i == 63 || i == 62 || i == 163 || i == 162 || i == 115 || i == 114 || i == 167 || i == 166 || i == 119 || i == 118) {
       led.setPixelColor(i - 1, led.Color(brght * 0.5, brght * 0.5, brght * 0.5));
     }
   }
@@ -378,7 +378,6 @@ void start_program() {
   }
   if (selct == 0) {
     Serial.println(F("Hauptbildschirm wird angezeigt"));
-
     start_screen();
     easter_egg();
     reset();
@@ -466,7 +465,7 @@ void reset() {
         }
       }
       //JUMP AND RUN//
-      if (x_one == 255 || x_two == 255 || x_three == 255 || x_four == 255 || courser_on_JUMP_AND_RUN) {
+      /* if (x_one == 255 || x_two == 255 || x_three == 255 || x_four == 255 || courser_on_JUMP_AND_RUN) {
         courser_on_TIC_TAC_TOE = false;
         courser_on_RACE_GAME = false;
         courser_on_COIN_GAME = false;
@@ -482,7 +481,7 @@ void reset() {
           selct = 4;
           standby_Timer = 0;
         }
-      }
+      }*/
       //STOP AND GO//
       //überprüfen
       if (y_one >= 220 && x_one <= 15 && x_one >= 1 || y_two >= 220 && x_two <= 15 && x_two >= 1 || y_three >= 220 && x_three <= 15 && x_three >= 1 || y_four >= 220 && x_four <= 15 && x_four >= 1 || courser_on_STOP_AND_GO) {
@@ -2472,6 +2471,7 @@ void easter_egg() {  //Credits
   nunchuck3.readData();
   if (nunchuck3.getButtonZ() == 1) {
     easter_counter++;
+    Serial.println(easter_counter);
   }
   if (easter_counter > 100) {
     for (int i = 0; i < MAXLED; i++) {
@@ -2545,23 +2545,25 @@ void wire() {                 //Slave Kommunikation per I²C
 //Loop wird genau wie Setup in jedem Programm benötigt
 //void loop wird AUTOMATISCH immer wieder aufgerufen
 void loop() {
+  wire(); //Kommunikation mit Slave Arduino welcher die Musik steuert
+  Led_button(); //Beleuchtung des Home buttons
+  start_program(); 
+  reset();
+  /*###############Funktionen entfernt wegen unzureichendem SRAM auf dem Arduino##################
+  dev_made_easy();
+  select_music();
+  game_JUMP_AND_RUN(); 
   Serial.write("Free SRAM:");
   Serial.println(availableMemory());
-  wire();
-  Led_button();
-  start_program();
-  reset();
-  //dev_made_easy();
-  //select_music();
+  Serial.println("LETS GO");
+  Serial.println(selct);
+  Serial.println(easter_counter);
+  ###############################################################################################*/
   game_ONE_LED_RACE();
   game_TWO_TIC_TAC_TOE();
   game_COIN_COLLECT();
-  //game_JUMP_AND_RUN();
   game_STOP_AND_GO();
   standby_Timer++;
-  //Serial.println("LETS GO");
-  //Serial.println(selct);
-  //Serial.println(easter_counter);
   easter_egg();
 }
 
