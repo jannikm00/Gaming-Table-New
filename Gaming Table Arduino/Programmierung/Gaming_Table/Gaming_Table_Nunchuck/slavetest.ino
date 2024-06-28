@@ -57,7 +57,7 @@ void select_music() {
     mario_theme();
     LED_Breathe_Red();
   }
-  Race Game Musik
+  //Race Game Musik
   if (selct == 1) {
     LED_Shoot_White();
     Tokyo_Drift_theme();
@@ -299,6 +299,7 @@ void LED_Gold_Glitter() {
   for (int i = 0; i < MAXLED; i++) {
     int randompixel = random(0, 500);
     led.setPixelColor(randompixel, led.Color(255, 255, 0));
+    led.setPixelColor(randompixel + 1, led.Color(255, 255, 0));
     led.show();
   }
   for (int i = 0; i < MAXLED; i++) {
