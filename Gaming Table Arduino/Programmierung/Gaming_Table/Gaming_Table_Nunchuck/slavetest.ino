@@ -2,7 +2,7 @@
 #include "MusikVariablen.h"
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
-int MAXLED = 100;
+int MAXLED = 140;
 int LED_PIN = 6;
 int selct;
 int melodyPin = 3;
@@ -303,13 +303,13 @@ void LED_Gold_Glitter() {
     led.show();
   }
   for (int i = 0; i < MAXLED; i++) {
-    int randompixel = random(0, 100);
+    int randompixel = random(0, 140);
     led.setPixelColor(randompixel, led.Color(0, 0, 0));
   }
   led.show();
 }
 void LED_Red_Flash() {
-  if (random(0, 100) == 42) {
+  if (random(0, 200) == 42) {
     for (int i = 0; i < MAXLED; i++) {
       led.setPixelColor(i, led.Color(255, 0, 0));
     }
