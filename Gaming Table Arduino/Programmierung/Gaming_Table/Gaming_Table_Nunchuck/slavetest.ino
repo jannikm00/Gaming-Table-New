@@ -7,6 +7,7 @@ müssen die Animationen raus, also nur Farben ohne Veränderungen, oder die Musi
 #include "MusikVariablen.h"
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
+int change = 0; //für veränderung des Status zu speichern
 int MAXLED = 140;
 int LED_PIN = 6;
 int selct;
