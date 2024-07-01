@@ -1,3 +1,8 @@
+/*Wichtig! die Musik läuft wegen der Led Animationen sehr schlecht entweder 
+müssen die Animationen raus, also nur Farben ohne Veränderungen, oder die Musik muss deaktiviert werden.*/
+
+
+
 #include <pitches.h>
 #include "MusikVariablen.h"
 #include <Wire.h>
