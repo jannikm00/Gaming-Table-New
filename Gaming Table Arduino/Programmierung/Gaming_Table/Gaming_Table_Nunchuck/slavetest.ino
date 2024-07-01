@@ -7,7 +7,8 @@ müssen die Animationen raus, also nur Farben ohne Veränderungen, oder die Musi
 #include "MusikVariablen.h"
 #include <Wire.h>
 #include <Adafruit_NeoPixel.h>
-int change = 0; //für veränderung des Status zu speichern
+int string Color;
+int change = 1; //für veränderung des Status zu speichern
 int MAXLED = 140;
 int LED_PIN = 6;
 int selct;
@@ -51,7 +52,10 @@ void loop() {
     }
     int x = Wire.read();  // receive byte as an integer
     Serial.println(x);    // print the integer
-
+if(selct != x){
+change = 1;}
+else{
+change = 0;}
     selct = x;
   }
 
@@ -74,7 +78,9 @@ void loop() {
     //Collect Coin Musik
     if (selct == 3) {
       pacman_theme();
-      LED_Gold_Glitter();
+Color = "Yellow";
+ledcolor();
+      //LED_Gold_Glitter();
     }
     /*
   //Jump and Run Musik
@@ -325,3 +331,12 @@ void loop() {
       led.show();
     }
   }
+
+void ledcolor(){
+//Gelb
+if(Color == "Yellow" && change == 1){
+for(int i; i < MAXLED; i++){
+led.setPixelColor(i, led.Color(255,255,0));
+}
+led.show();}
+}
