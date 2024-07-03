@@ -7,3 +7,6 @@ https://github.com/jannikm00/Gaming-Table-V2/blob/main/Gaming%20Table%20Arduino/
 Wiring: https://github.com/jannikm00/Gaming-Table-V2/blob/main/Gaming%20Table%20Arduino/Multiplexer20.pdf
 
 Library Nunchuck: https://github.com/jannikm00/WiiChuck/
+
+
+Bei Wiring ist noch ein LED-Streifen dazu gekommen angeschlossen auf -K2.DI6
