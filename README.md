@@ -13,3 +13,6 @@ Bei Wiring ist noch ein LED-Streifen dazu gekommen angeschlossen auf -K2.DI6
 
 ![IMG_20240628_150315587](https://github.com/jannikm00/Gaming-Table-V2/assets/72359748/df977f50-930f-4356-abb1-56f01424b122)
 
+
+https://github.com/jannikm00/Gaming-Table-V2/assets/72359748/eb832606-cba4-4c37-928f-af5207e02d21
+
