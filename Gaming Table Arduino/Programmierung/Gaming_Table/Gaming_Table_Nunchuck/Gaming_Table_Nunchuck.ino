@@ -1,9 +1,9 @@
 #include <Adafruit_NeoPixel.h>
 #include <WiiChuck.h>
 #include <Wire.h>
-/*
-#include <pitches.h>
-#include "MusikVariablen.h"*/
+
+//Link zum backup
+//https://github.com/jannikm00/Gaming-Table-V2
 
 /*****************************************/
 /*****************************************/
@@ -11,7 +11,7 @@
 /*****************************************/
 /*****************************************/
 
-//Integration Wii NUNCHUK
+//Integration Wii NUNCHUK (Library wurde bearbeitet damit das Programm funktioniert)
 //https://www.makerblog.at/2016/01/wii-nunchuk-controller-am-arduino-teil-1/
 //https://learn.adafruit.com/adafruit-wii-nunchuck-breakout-adapter/arduino-use
 //https://github.com/madhephaestus/WiiChuck/blob/master/src/Nunchuck.h
@@ -41,35 +41,19 @@ int melodyPin = 3;
 int n = 96;
 /***************************************/
 
-/***************************************/
-
-//*Zusätzliche Musik Variablen*//
-/*
-int control_music = 0;
-float pauseBetweenNotes;
-int thisNote = 0;
-float pBN_mario = 8;
-float pBN_underworld = 8;
-float pBN_starwars = 8;
-float pBN_doom = 8;  // wird von pauseBetweenNotes abgezogen simuliert ein delay, muss bei manchen Lieder evtl. Manuel eingegeben werden
-float pBN_pacman = 8;
-float pBN_pinkpanther = 8;
-float pBN_simpson = 8;
-float pBN_tokyodrift = 8;*/
-int change_music_in_home_screen_status = 2;  //0:mario_them, 1:star_wars_theme, 2:pink_panther_theme, 3:pacman_theme, 4:doom_theme, 5:underworld_theme
-
 /**************************************/
 
 //**NUMMER DER LEDS UND TIMER FUNKTION FÜR STANDBY-MODUS**//
 int MAXLED = 2304;
 int standby_Timer = 0;
-int st = 3000;  // gibt an wann der standby-Modus beginnt nicht zu groß machen!!
+int st = 30000;  // gibt an wann der standby-Modus beginnt nicht zu groß machen!!
 //String god_mode = "";  //kann das Programmieren erleichtern, kann bestimmte funktionen ein und ausschalten
 
 /*************************************/
 
 //**VARIABLEN ZUR SPIEL AUSWAHL UND ZUM RESET**//
-int selct = 0;  // select muss zum start 0 sein, bis jetzt select 0 bis 6 belegt!!
+int selct = 0;           // select muss zum start 0 sein, bis jetzt select 0 bis 6 belegt!!
+int selct_wire = selct;  // select variable zur wire kommunikation mit Arduino 2
 int select_input = 8;
 int Led_button_pin = 11;
 int x_one;
@@ -281,14 +265,6 @@ void setup() {
     led.setPixelColor(i, led.Color(0, 0, 0));
   }
   led.show();
-  /*
-   while (digitalRead(select_input) == 1) {
-    for (int i = 0; i < MAXLED; i++) {
-      led.setPixelColor(i, led.Color(100, 100, 100));
-      digitalRead(select_input);
-    }
-    led.show();
-  }*/
   pinMode(melodyPin, OUTPUT);
   randomSeed(analogRead(A0));
   led.setBrightness(brght);
@@ -298,10 +274,10 @@ void setup() {
   nunchuck3.addMultiplexer(0x70, 4);
   nunchuck4.addMultiplexer(0x70, 5);
   //
-  nunchuck1.begin();
-  nunchuck2.begin();
-  nunchuck3.begin();
-  nunchuck4.begin();
+  nunchuck1.begin();  //Rot
+  nunchuck2.begin();  //Pink
+  nunchuck3.begin();  //Weiß
+  nunchuck4.begin();  //Blau
   //Wenn die Automatische erkennung Fehlerhaft ist
 
   if (nunchuck1.type == Unknown) {
@@ -320,13 +296,13 @@ void setup() {
 
 
 void start_screen() {
-  for (int i = 0; i < MAXLED; i++) {  //Home Rot Gelöscht : i == 1064
+  for (int i = 0; i < MAXLED; i++) {
     if (i == 1281 || i == 1263 || i == 268 || i == 1988 || i == 1939 || i == 1892 || i == 1941 || i == 1033 || i == 1032 || i == 1031 || i == 985 || i == 984 || i == 983 || i == 937 || i == 936 || i == 935 || i == 889 || i == 888 || i == 887 || i == 841 || i == 840 || i == 839 || i == 793 || i == 792 || i == 791 || i == 744 || i == 696 || i == 648 || i == 1178 || i == 1177 || i == 1176 || i == 1175 || i == 1174 || i == 1130 || i == 1129 || i == 1128 || i == 1127 || i == 1126 || i == 1082 || i == 1081 || i == 1080 || i == 1079 || i == 1078 || i == 1271 || i == 1270 || i == 1223 || i == 1222 || i == 1274 || i == 1273 || i == 1226 || i == 1225 || i == 1323 || i == 1322 || i == 1318 || i == 1317 || i == 1269 || i == 1268 || i == 1267 || i == 1277 || i == 1276 || i == 1275 || i == 1233 || i == 1232 || i == 1231 || i == 1230 || i == 1229 || i == 1219 || i == 1218 || i == 1217 || i == 1216 || i == 1215 || i == 1184 || i == 1183 || i == 1135 || i == 1169 || i == 1168 || i == 1121 || i == 1329 || i == 1328 || i == 1376 || i == 1375 || i == 1374 || i == 1422 || i == 1421 || i == 1420 || i == 1419 || i == 1418 || i == 1417 || i == 1416 || i == 1415 || i == 1414 || i == 1413 || i == 1412 || i == 1411 || i == 1410 || i == 1362 || i == 1361 || i == 1360 || i == 1312 || i == 1311 || i == 1467 || i == 1466 || i == 1465 || i == 1464 || i == 1463 || i == 1462 || i == 1461) {
       led.setPixelColor(i - 1, led.Color(255, 0, 0));
     }
   }
-  for (int i = 0; i < MAXLED; i++) {  //Home Weiß Gelöscht : (i == 1208 || i == 1207 || i == 1206 || i == 1205 || i == 1204 || i == 1203 || i == 1202 || i == 1157 || i == 1109 || i == 1107 || i == 1059 || i == 1016 || i == 1015 || i == 1014 || i == 1013 || i == 1012 || i == 1011 || i == 1010
-    if (i == 2045 || i == 2044 || i == 2043 || i == 2042 || i == 2041 || i == 2040 || i == 2039 || i == 2038 || i == 2037 || i == 2036 || i == 2035 || i == 1853 || i == 1852 || i == 1851 || i == 1850 || i == 1849 || i == 1848 || i == 1847 || i == 1846 || i == 1845 || i == 1844 || i == 1843 || i == 1994 || i == 1946 || i == 1898 || i == 1990 || i == 1942 || i == 1894 || i == 1798 || i == 1750 || i == 1702 || i == 1802 || i == 1754 || i == 1706 || i == 2182 || i == 2134 || i == 2086 || i == 2186 || i == 2138 || i == 2090 || i == 79 || i == 78 || i == 77 || i == 76 || i == 75 || i == 74 || i == 73 || i == 72 || i == 71 || i == 70 || i == 69 || i == 68 || i == 67 || i == 66 || i == 65 || i == 64 || i == 63 || i == 62 || i == 163 || i == 162 || i == 115 || i == 114 || i == 167 || i == 166 || i == 119 || i == 118) {
+  for (int i = 0; i < MAXLED; i++) {
+    if (i == 2045 || i == 2044 || i == 2043 || i == 2042 || i == 2041 || i == 2040 || i == 2039 || i == 2038 || i == 2037 || i == 2036 || i == 2035 || i == 1853 || i == 1852 || i == 1851 || i == 1850 || i == 1849 || i == 1848 || i == 1847 || i == 1846 || i == 1845 || i == 1844 || i == 1843 || i == 1994 || i == 1946 || i == 1898 || i == 1990 || i == 1942 || i == 1894 || i == 1798 || i == 1750 || i == 1702 || i == 1802 || i == 1754 || i == 1706 || i == 2182 || i == 2134 || i == 2086 || i == 2186 || i == 2138 || i == 2090) {
       led.setPixelColor(i - 1, led.Color(brght * 0.5, brght * 0.5, brght * 0.5));
     }
   }
@@ -336,7 +312,7 @@ void start_screen() {
     }
   }
   for (int i = 0; i < MAXLED; i++) {  //Home räder auto
-    if (i == 163 || i == 162 || i == 115 || i == 114 || i == 167 || i == 119 || i == 166 || i == 118) {
+    if (i == 122 || i == 121 || i == 170 || i == 169 || i == 166 || i == 165 || i == 118 || i == 117) {
       led.setPixelColor(i - 1, led.Color(brght, brght, brght));
     }
   }
@@ -400,6 +376,7 @@ void reset() {
       }
       led.show();
       selct = 0;
+      selct_wire = selct;
       standby_Timer = 0;
     }
     if (selct == 0) {
@@ -416,7 +393,7 @@ void reset() {
       x_four = nunchuck4.getJoyX();
       y_four = nunchuck4.getJoyY();
       //RACE GAME//
-      if (y_one == 0 || y_two == 0 || y_three == 0 || y_four == 0 || courser_on_RACE_GAME) {
+      if (y_one <= 5 || y_two <= 5 || y_three <= 5 || y_four <= 5 || courser_on_RACE_GAME) {
         courser_on_TIC_TAC_TOE = false;
         courser_on_RACE_GAME = true;
         courser_on_COIN_GAME = false;
@@ -428,11 +405,12 @@ void reset() {
         led.show();
         if (nunchuck1.getButtonZ() == 1 || nunchuck2.getButtonZ() == 1 || nunchuck3.getButtonZ() == 1 || nunchuck4.getButtonZ() == 1) {
           selct = 1;
+          selct_wire = selct;
           standby_Timer = 0;
         }
       }
       //TIC TAC TOE//
-      if (y_one == 255 || y_two == 255 || y_three == 255 || y_four == 255 || courser_on_TIC_TAC_TOE) {
+      if (y_one >= 250 || y_two >= 250 || y_three >= 250 || y_four >= 250 || courser_on_TIC_TAC_TOE) {
         courser_on_TIC_TAC_TOE = true;
         courser_on_RACE_GAME = false;
         courser_on_COIN_GAME = false;
@@ -446,11 +424,12 @@ void reset() {
         led.show();
         if (nunchuck1.getButtonZ() == 1 || nunchuck2.getButtonZ() == 1 || nunchuck3.getButtonZ() == 1 || nunchuck4.getButtonZ() == 1) {
           selct = 2;
+          selct_wire = selct;
           standby_Timer = 0;
         }
       }
       //COIN GAME//
-      if (x_one == 0 || x_two == 0 || x_three == 0 || x_four == 0 || courser_on_COIN_GAME) {
+      if (x_one <= 5 || x_two <= 5 || x_three <= 5 || x_four <= 5 || courser_on_COIN_GAME) {
         courser_on_TIC_TAC_TOE = false;
         courser_on_RACE_GAME = false;
         courser_on_COIN_GAME = true;
@@ -464,6 +443,7 @@ void reset() {
         led.show();
         if (nunchuck1.getButtonZ() == 1 || nunchuck2.getButtonZ() == 1 || nunchuck3.getButtonZ() == 1 || nunchuck4.getButtonZ() == 1) {
           selct = 3;
+          selct_wire = selct;
           standby_Timer = 0;
         }
       }
@@ -488,14 +468,13 @@ void reset() {
       //STOP AND GO//
       //überprüfen
       // if (y_one >= 220 && x_one <= 15 && x_one >= 1 || y_two >= 220 && x_two <= 15 && x_two >= 1 || y_three >= 220 && x_three <= 15 && x_three >= 1 || y_four >= 220 && x_four <= 15 && x_four >= 1 || courser_on_STOP_AND_GO) {
-      if (x_one == 255 || x_two == 255 || x_three == 255 || x_four == 255 || courser_on_STOP_AND_GO) {
+      if (x_one >= 250 || x_two >= 250 || x_three >= 250 || x_four >= 250 || courser_on_STOP_AND_GO) {
         courser_on_TIC_TAC_TOE = false;
         courser_on_RACE_GAME = false;
         courser_on_COIN_GAME = false;
         courser_on_JUMP_AND_RUN = false;
         courser_on_STOP_AND_GO = true;
         for (int i = 0; i < MAXLED; i++) {
-          //if (i == 1532 || i == 1484 || i == 1435 || i == 1434 || i == 1481 || i == 1529 || i == 1577 || i == 1625 || i == 1673 || i == 1721 || i == 1769 || i == 1817 || i == 1866 || i == 1819 || i == 1820 || i == 1869 || i == 1822 || i == 1870 || i == 1918 || i == 1965 || i == 2012 || i == 2059 || i == 2058 || i == 2057 || i == 2056 || i == 2055 || i == 2006 || i == 1957 || i == 1908 || i == 1860 || i == 1812 || i == 1861 || i == 1814 || i == 1815 || i == 1864) {
           if (i == 1355 || i == 1354 || i == 1353 || i == 1352 || i == 1351 || i == 1350 || i == 1349 || i == 1348 || i == 1347 || i == 1346 || i == 1345
               || i == 1307 || i == 1306 || i == 1305 || i == 1304 || i == 1303 || i == 1302 || i == 1301 || i == 1300 || i == 1299 || i == 1298 || i == 1297
               || i == 1259 || i == 1258 || i == 1257 || i == 1256 || i == 1255 || i == 1254 || i == 1253 || i == 1252 || i == 1251 || i == 1250 || i == 1249
@@ -511,13 +490,14 @@ void reset() {
               || i == 779 || i == 778 || i == 777 || i == 776 || i == 775 || i == 774 || i == 773 || i == 772 || i == 771 || i == 770 || i == 769
               || i == 731 || i == 730 || i == 729 || i == 728 || i == 727 || i == 726 || i == 725 || i == 724 || i == 723 || i == 722 || i == 721) {
             led.setPixelColor(i - 2, led.Color(0, 0, 0));
-            led.setPixelColor(i -1, led.Color(0, 0, 0));
+            led.setPixelColor(i - 1, led.Color(0, 0, 0));
           }
         }
         led.show();
 
         if (nunchuck1.getButtonZ() == 1 || nunchuck2.getButtonZ() == 1 || nunchuck3.getButtonZ() == 1 || nunchuck4.getButtonZ() == 1) {
           selct = 5;
+          selct_wire = selct;
           standby_Timer = 0;
         }
       }
@@ -530,18 +510,24 @@ void reset() {
       }
       if (!courser_on_TIC_TAC_TOE && !courser_on_RACE_GAME && !courser_on_COIN_GAME && !courser_on_JUMP_AND_RUN && !courser_on_STOP_AND_GO) {
         if (nunchuck1.getButtonC() == 1) {
-          change_music_in_home_screen_status += 1;
-          Serial.println(change_music_in_home_screen_status);
+          selct_wire += 1;
+          if (selct_wire == 4) {
+            selct_wire = 5;
+          }
+          Serial.println(selct_wire);
+          delay(150);
+          if (selct_wire > 5) {  //Der vergleichs wert musss je nachdem wie viele Lieder im Program sind verändert werden, er sollte der Anzahl der programierten Lieder entsprechen +1
+            selct_wire = 0;
+          }
         }
-        if (change_music_in_home_screen_status > 6) {  //Der vergleichs wert musss je nachdem wie viele Lieder im Program sind verändert werden, er sollte der Anzahl der programierten Lieder entsprechen
-          change_music_in_home_screen_status = 0;
+        if (nunchuck1.getButtonZ() == 1) {
+          selct_wire = 10;  //Schaltet die Musik Aus (Muss größer als selct sein)
         }
       }
     }
   }
 }
 //
-
 
 
 //STANDBY-MODUS LAUFLICHT//
@@ -566,7 +552,6 @@ void runlight() {
 }
 
 
-
 //RACE GAME FUNKTIONEN ZUM ANZEIGEN DER SPIELER POSITIONEN//
 //WIRD IN DER MAIN FUNCTION AUFGERUFEN//
 void draw_car1(void) {
@@ -576,17 +561,17 @@ void draw_car1(void) {
 }
 void draw_car2(void) {
   for (int i = 0; i <= loop2; i++) {
-    led.setPixelColor(((word)dist2 % MAXLED) + i, led.Color(0, 255, 0));
+    led.setPixelColor(((word)dist2 % MAXLED) + i, led.Color(255, 122, 150));
   }
 }
 void draw_car3(void) {
   for (int i = 0; i <= loop1; i++) {
-    led.setPixelColor(((word)dist3 % MAXLED) + i, led.Color(0, 0, 255));
+    led.setPixelColor(((word)dist3 % MAXLED) + i, led.Color(255, 255, 255));
   }
 }
 void draw_car4(void) {
   for (int i = 0; i <= loop2; i++) {
-    led.setPixelColor(((word)dist4 % MAXLED) + i, led.Color(255, 255, 255));
+    led.setPixelColor(((word)dist4 % MAXLED) + i, led.Color(0, 0, 255));
   }
 }
 //
@@ -650,7 +635,6 @@ void check_win_tic_tac_toe() {
   }
   check_no_winner();
   if (player_x_win) {
-    delay(500);
     for (int i = 0; i < MAXLED; i++) {
       led.setPixelColor(i, led.Color(0, 0, 0));
     }
@@ -660,6 +644,7 @@ void check_win_tic_tac_toe() {
       }
     }
     led.show();
+    delay(500);
     player_x_win = false;
     ttt_start = 0;
     count_no_winner = 0;
@@ -685,15 +670,15 @@ void check_win_tic_tac_toe() {
   }
   if (player_o_win) {
     for (int i = 0; i < MAXLED; i++) {
+      led.setPixelColor(i, led.Color(0, 0, 0));
+    }
+    for (int i = 0; i < MAXLED; i++) {
       if (i == 1410 || i == 1362 || i == 1314 || i == 1266 || i == 1218 || i == 1170 || i == 1122 || i == 1074 || i == 1026 || i == 978 || i == 930 || i == 1469 || i == 1468 || i == 1467 || i == 1466 || i == 1465 || i == 1464 || i == 1463 || i == 1462 || i == 1461 || i == 1460 || i == 1459 || i == 1422 || i == 1374 || i == 1326 || i == 1278 || i == 1230 || i == 1182 || i == 1134 || i == 1086 || i == 1038 || i == 990 || i == 942 || i == 893 || i == 892 || i == 891 || i == 890 || i == 889 || i == 888 || i == 887 || i == 886 || i == 885 || i == 884 || i == 883) {
         led.setPixelColor(i, led.Color(0, 0, 255));
       }
     }
-    for (int i = 0; i < MAXLED; i++) {
-      led.setPixelColor(i, led.Color(0, 0, 0));
-    }
-
     led.show();
+    delay(500);
     player_o_win = false;
     ttt_start = 0;
     count_no_winner = 0;
@@ -718,7 +703,6 @@ void check_win_tic_tac_toe() {
     delay(2000);
   }
   if (no_winner) {
-    delay(500);
     for (int i = 0; i < MAXLED; i++) {
       led.setPixelColor(i, led.Color(0, 0, 0));
     }
@@ -731,6 +715,7 @@ void check_win_tic_tac_toe() {
       }
     }
     led.show();
+    delay(500);
     no_winner = false;
     count_no_winner = 0;
     ttt_start = 0;
@@ -757,35 +742,35 @@ void check_win_tic_tac_toe() {
 }
 void select_field() {
   nunchuck1.readData();
-  nunchuck2.readData();
+  nunchuck4.readData();
   if (!beginner) {
     x_achse = nunchuck1.getJoyX();
     y_achse = nunchuck1.getJoyY();
   }
   if (beginner) {
-    x_achse = nunchuck2.getJoyX();
-    ;
-    y_achse = nunchuck2.getJoyY();
+    x_achse = nunchuck4.getJoyX();
+    y_achse = nunchuck4.getJoyY();
+    Serial.println(y_achse);
   }
-  if (x_achse == 0) {
+  if (x_achse <= 5) {
     x--;
     if (x <= 0) {
       x = 0;
     }
   }
-  if (x_achse == 255) {
+  if (x_achse >= 250) {
     x++;
     if (x >= 2) {
       x = 2;
     }
   }
-  if (y_achse == 0) {
+  if (y_achse <= 5) {
     y--;
     if (y <= 0) {
       y = 0;
     }
   }
-  if (y_achse == 255) {
+  if (y_achse >= 250) {
     y++;
     if (y >= 2) {
       y = 2;
@@ -1037,19 +1022,19 @@ void led_update() {
   //draw player 2
   for (int i = 137; i < 189; i++) {
     if (i == 138 || i == 139 || i == 187 || i == 186) {
-      led.setPixelColor(i + n2, led.Color(0, 255, 0));
+      led.setPixelColor(i + n2, led.Color(255, 122, 150));
     }
   }
   //draw player 3
   for (int i = 106; i < 158; i++) {
     if (i == 156 || i == 155 || i == 107 || i == 108) {
-      led.setPixelColor(i + n3, led.Color(0, 0, 255));
+      led.setPixelColor(i + n3, led.Color(255, 255, 255));
     }
   }
   //draw player 4
   for (int i = 130; i < 182; i++) {
     if (i == 131 || i == 132 || i == 180 || i == 179) {
-      led.setPixelColor(i + n4, led.Color(255, 255, 255));
+      led.setPixelColor(i + n4, led.Color(0, 0, 255));
     }
   }
   led.show();
@@ -1180,7 +1165,7 @@ void check_win_coin_collect() {
   //player2 win screen
   if (score2 >= 7) {
     for (int i = 0; i < MAXLED; i++) {
-      led.setPixelColor(i, led.Color(0, 255, 0));
+      led.setPixelColor(i, led.Color(255, 122, 150));
     }
     led.show();
     n1 = 0;
@@ -1196,7 +1181,7 @@ void check_win_coin_collect() {
   //player3 win screen
   if (score3 >= 7) {
     for (int i = 0; i < MAXLED; i++) {
-      led.setPixelColor(i, led.Color(0, 0, 255));
+      led.setPixelColor(i, led.Color(150, 150, 150));
     }
     led.show();
     n1 = 0;
@@ -1212,7 +1197,7 @@ void check_win_coin_collect() {
   //player4 win screen
   if (score4 >= 7) {
     for (int i = 0; i < MAXLED; i++) {
-      led.setPixelColor(i, led.Color(150, 150, 150));
+      led.setPixelColor(i, led.Color(0, 0, 255));
     }
     led.show();
     n1 = 0;
@@ -1398,7 +1383,7 @@ void game_ONE_LED_RACE() {
 
       if (loop2 > loop_max) {
         for (int i = 0; i < MAXLED; i++) {
-          led.setPixelColor(i, led.Color(0, 255, 0));
+          led.setPixelColor(i, led.Color(255, 122, 150));
         }
         led.show();
         loop1 = 5;
@@ -1420,7 +1405,7 @@ void game_ONE_LED_RACE() {
 
       if (loop3 > loop_max) {
         for (int i = 0; i < MAXLED; i++) {
-          led.setPixelColor(i, led.Color(0, 0, 255));
+          led.setPixelColor(i, led.Color(255, 255, 255));
         }
         led.show();
         loop1 = 5;
@@ -1442,7 +1427,7 @@ void game_ONE_LED_RACE() {
 
       if (loop4 > loop_max) {
         for (int i = 0; i < MAXLED; i++) {
-          led.setPixelColor(i, led.Color(255, 255, 255));
+          led.setPixelColor(i, led.Color(0, 0, 255));
         }
         led.show();
         loop1 = 5;
@@ -1637,8 +1622,8 @@ void game_TWO_TIC_TAC_TOE() {
         }
       }
       if (beginner) {
-        nunchuck2.readData();
-        status_pressed1 = nunchuck2.getButtonC();
+        nunchuck4.readData();
+        status_pressed1 = nunchuck4.getButtonC();
         check_win_tic_tac_toe();
         if (status == 1) {
           for (int i = 0; i < MAXLED; i++) {
@@ -1776,7 +1761,7 @@ void game_COIN_COLLECT() {
 
 
 //zur bewegung der Spielfigur in JUMP AND RUN
-void jumper() {
+/*void jumper() {
   nunchuck1.readData();
   nunchuck2.readData();
   nunchuck3.readData();
@@ -1815,7 +1800,7 @@ void jumper() {
   if (nunchuck3.getJoyY() > 180 && jump3 < 572) {
     jump3 += 96;
   }
-}
+}//
 
 //zeigt an wenn eine Collision entdeckt wurde
 void collision() {
@@ -2075,9 +2060,9 @@ void game_JUMP_AND_RUN() {
       led_row4 = led_row4 + row_move_speed;
     }
     /*******************************************************************************/
-    // Ausgeklammert weil ab 5 reihen die so programmiert sind die Leds nicht mehr richtig ablaufen und angezeigt werden, bis 4 reihen funktioniert die Programierung
-    /******************************************************************************/
-    /*if (row5) {
+// Ausgeklammert weil ab 5 reihen die so programmiert sind die Leds nicht mehr richtig ablaufen und angezeigt werden, bis 4 reihen funktioniert die Programierung
+/******************************************************************************/
+/*if (row5) {
       for (int i = 48; i < 1633; i++) {
         if (i == 48 || i == 96) {
           led.setPixelColor(i + led_row5, led.Color(255, 255, 255));
@@ -2121,8 +2106,8 @@ void game_JUMP_AND_RUN() {
       led_row5 = led_row5 + row_move_speed;
     }
 */
-    //Entscheidet wann eine neue Block reihe erzeugt wird (row_speed ist dafür entscheident -> desto kleiner rwo_speed desto schneller)
-    if (num_of_total_rows >= 1) {
+//Entscheidet wann eine neue Block reihe erzeugt wird (row_speed ist dafür entscheident -> desto kleiner rwo_speed desto schneller)
+/*if (num_of_total_rows >= 1) {
       if (counter_new_row >= row_speed) {
         new_block = true;
         counter_new_row = 0;
@@ -2188,7 +2173,7 @@ void game_JUMP_AND_RUN() {
     ran_num = 0;
     led.show();
   }
-}
+}*/
 
 
 //sorgt für die Bewegung der Spieler und überprüft ob diese sich  im Ziel befinden
@@ -2222,7 +2207,7 @@ void stop_and_go_player() {
   if (!failure_p2) {
     for (int i = 19; i < 117; i++) {
       if (i == 20 || i == 67 || i == 69 || i == 116) {
-        led.setPixelColor(i + move_squid_p2, led.Color(0, 255, 0));
+        led.setPixelColor(i + move_squid_p2, led.Color(255, 122, 150));
       }
       if ((i + move_squid_p2) >= 1892) {
         win_p2 = true;
@@ -2238,7 +2223,7 @@ void stop_and_go_player() {
   if (!failure_p3) {
     for (int i = 27; i < 126; i++) {
       if (i == 28 || i == 74 || i == 76 || i == 78 || i == 123 || i == 124 || i == 125) {
-        led.setPixelColor(i + move_squid_p3, led.Color(0, 0, 255));
+        led.setPixelColor(i + move_squid_p3, led.Color(255, 255, 255));
       }
       if ((i + move_squid_p3) >= 1900) {
         win_p3 = true;
@@ -2254,7 +2239,7 @@ void stop_and_go_player() {
   if (!failure_p4) {
     for (int i = 34; i < 134; i++) {
       if (i == 35 || i == 37 || i == 84 || i == 131 || i == 133) {
-        led.setPixelColor(i + move_squid_p4, led.Color(255, 255, 255));
+        led.setPixelColor(i + move_squid_p4, led.Color(0, 0, 255));
       }
       if ((i + move_squid_p4) >= 1907) {
         win_p4 = true;
@@ -2474,7 +2459,6 @@ void game_STOP_AND_GO() {
 }
 
 
-
 void rainbow(int wait) {
   for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
     for (int i = 0; i < 815; i++) {
@@ -2552,7 +2536,7 @@ void Led_button() {
 void wire() {  //Slave Kommunikation per I²C
   if (easter_counter < 100) {
     Wire.beginTransmission(9);  //Adresse 9 auf Bus
-    Wire.write(selct);
+    Wire.write(selct_wire);
     Wire.endTransmission();
   }
   if (easter_counter >= 100) {
@@ -2573,13 +2557,9 @@ void loop() {
   reset();
   /*###############Funktionen entfernt wegen unzureichendem SRAM auf dem Arduino##################
   dev_made_easy();
-  select_music();
   game_JUMP_AND_RUN(); 
   Serial.write("Free SRAM:");
-  Serial.println(availableMemory());
-  Serial.println("LETS GO");
-  Serial.println(selct);
-  Serial.println(easter_counter);
+  Serial.println(availableMemory());;
   ###############################################################################################*/
   game_ONE_LED_RACE();
   game_TWO_TIC_TAC_TOE();
