@@ -1,127 +1,92 @@
-/*Wichtig! die Musik läuft wegen der Led Animationen sehr schlecht entweder
-müssen die Animationen raus, also nur Farben ohne Veränderungen, oder die Musik muss deaktiviert
-werden.*/
-
-#include <Adafruit_NeoPixel.h>
-#include <Wire.h>
 #include <pitches.h>
 #include "MusikVariablen.h"
+#include <Wire.h>
+#include <Adafruit_NeoPixel.h>
 
-int string Color;
-int change = 1;  // Veränderung Status speichern
-int done = 0; // Aktualisierung LEDs abschließen
-int MAXLED = 140;
+int MAXLED = 180;
 int LED_PIN = 6;
-int selct;
+int selct_wire;
 int melodyPin = 3;
 int control_music = 0;
 float pauseBetweenNotes = 0;
 int thisNote = 0;
-float pBN_mario = 6;
+
+// wird von pauseBetweenNotes abgezogen simuliert ein delay, muss bei manchen Lieder evtl. Manuel eingegeben werden oder note_duration multiplikator verändern
+float pBN_mario = 70;
 float pBN_underworld = 8;
 float pBN_starwars = 8;
-float pBN_doom = 8;  // wird von pauseBetweenNotes abgezogen simuliert ein delay, muss bei manchen
-                     // Lieder evtl. Manuel eingegeben werden
+float pBN_doom = 10; 
 float pBN_pacman = 8;
 float pBN_pinkpanther = 8;
 float pBN_simpson = 8;
-float pBN_tokyodrift = 8;
-int change_music_in_home_screen_status = 2;
+float pBN_tokyodrift = 18;
+
 Adafruit_NeoPixel led(MAXLED, 6, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   led.begin();
   Wire.begin(9);
+
   Serial.begin(9600);
   for (int i = 0; i < MAXLED; i++) {
     led.setPixelColor(i, led.Color(0, 0, 0));
   }
   led.show();
 }
-
 void loop() {
   Wire.onReceive(receiveEvent);
   select_music();
-  Serial.println(selct);
-  done = 0;
+  Serial.println(selct_wire);
+  delay(10);
+}
+// function that executes whenever data is received from master
+// this function is registered as an event, see setup()
+void receiveEvent(int howMany) {
+  while (1 < Wire.available())  // loop through all but the last
+  {
+    char c = Wire.read();  // receive byte as a character
+    Serial.print(c);       // print the character
+  }
+  int x = Wire.read();  // receive byte as an integer
+  Serial.println(x);    // print the integer
+
+  selct_wire = x;
 }
 
-// Funktion zur Erkennung der Datenübertragung
-void receiveEvent(int howMany) {
-  while (1 < Wire.available())  // nur ausführen wenn I2C verbunden ist
-  {
-    char c = Wire.read();  // byte als char empfangem
-    Serial.print(c);
-  }
-  int x = Wire.read();  // byte als int empfangen
-  Serial.println(x);
-  // Erkennt ob sich der Status verändert hat um die LEDs zu aktualisieren
-  if (selct != x) {
-    change = 1;
-  } else {
-    change = 0;
-  }
-  selct = x;
-}
 
 void select_music() {
-  // Title Musik und Farbe
-  if (selct == 0) {
+  //Title Musik
+  if (selct_wire == 0) {
     mario_theme();
-    // LED_Breathe_Red();
     rainbow(1);
   }
-  // Race Game Musik und Farbe
-  if (selct == 1) {
-    //  LED_Shoot_White();
+  //Race Game Musik
+  if (selct_wire == 1) {
     Tokyo_Drift_theme();
-    Color = "Blue";
-    ledcolor();
-  }  // Tic Tac Toe Musik und Farbe
-  if (selct == 2) {
-    underworld_theme();
+    led1();
   }
-  Color = "Red";
-  ledcolor();
-  // Collect Coin Musik und Farbe
-  if (selct == 3) {
+  //Tic Tac Toe Musik
+  if (selct_wire == 2) {
+    underworld_theme();
+    led2();
+  }
+  //Collect Coin Musik
+  if (selct_wire == 3) {
     pacman_theme();
-    Color = "Yellow";
-    ledcolor();
-    // LED_Gold_Glitter();
+    LED_Gold_Glitter();
   }
-  /*
-//Jump and Run Musik
-if (selct == 4) {
-  pacman_theme();
-}*/
-  // Stop and Go Musik und Farbe
-  if (selct == 5) {
-    underworld_theme();
-    // LED_Red_Flash();
-    Color = "Green";
-    ledcolor();
+  //Stop and Go Musik
+  if (selct_wire == 5) {
+    doom_theme();
+    led3();
   }
-  // platzhalter für andere Spiele
 
-  if (selct == 6 || selct == 0 && change_music_in_home_screen_status == 6) {
-    Tokyo_Drift_theme();
-  }
-  if (selct == 7 || selct == 0 && change_music_in_home_screen_status == 7) {
-  }
-  if (selct == 8 || selct == 0 && change_music_in_home_screen_status == 8) {
-  }
-  if (selct == 9 || selct == 0 && change_music_in_home_screen_status == 9) {
-  }
-  // Easter Egg Musik
-  if (selct == 103) {  //"easter egg"
+
+  //Easter Egg Musik
+  if (selct_wire == 103) {  //"easter egg"
     pink_panther_theme();
-  for (int i = 0; i < MAXLED; i++) {
-    led.setPixelColor(i, led.Color(0, 0, 0));
   }
-  led.show();
-  }
-  if (selct == 232) { //Standby
+  if (selct_wire == 232) {
     delay(10);
   }
 }
@@ -151,7 +116,7 @@ void underworld_theme() {
   int size = sizeof(underworld_melody) / sizeof(int);
   if (thisNote < size && control_music == 0) {
     int noteDuration = 1000 / underworld_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
+    pauseBetweenNotes = noteDuration * 1.60;
     tone(melodyPin, underworld_melody[thisNote], noteDuration);
     control_music = 1;
     thisNote++;
@@ -214,7 +179,7 @@ void pacman_theme() {
   int size = sizeof(pacman_melody) / sizeof(int);
   if (thisNote < size && control_music == 0) {
     int noteDuration = 1000 / pacman_tempo[thisNote];
-    pauseBetweenNotes = noteDuration * 1.30;
+    pauseBetweenNotes = noteDuration * 1.10;
     tone(melodyPin, pacman_melody[thisNote], noteDuration);
     control_music = 1;
     thisNote++;
@@ -331,6 +296,7 @@ void LED_Gold_Glitter() {
   }
   led.show();
 }
+
 void LED_Red_Flash() {
   if (random(0, 200) == 42) {
     for (int i = 0; i < MAXLED; i++) {
@@ -346,56 +312,33 @@ void LED_Red_Flash() {
   }
 }
 
-// LED Farben
-void ledcolor() {
-  if (Color == "Yellow" && change == 1) {
-    while (done = 0) {
-      for (int i; i < MAXLED; i++) {
-        led.setPixelColor(i, led.Color(255, 255, 0));
-      }
-      led.show();
-      done = 1; //While Loop schließen wenn LEDs alle aktualisiert sind
-    }
-  }
-  if (Color == "Red" && change == 1) {
-    while (done = 0) {
-      for (int i; i < MAXLED; i++) {
-        led.setPixelColor(i, led.Color(255, 0, 0));
-      }
-      led.show();
-      done = 1; //While Loop schließen wenn LEDs alle aktualisiert sind
-    }
-  }
-  if (Color == "Blue" && change == 1) {
-    while (done = 0) {
-      for (int i; i < MAXLED; i++) {
-        led.setPixelColor(i, led.Color(0, 0, 255));
-      }
-      led.show();
-      done = 1; //While Loop schließen wenn LEDs alle aktualisiert sind
-    }
-  }
-  if (Color == "Green" && change == 1) {
-    while (done = 0) {
-      for (int i; i < MAXLED; i++) {
-        led.setPixelColor(i, led.Color(0, 255, 0));
-      }
-      led.show();
-      done = 1; //While Loop schließen wenn LEDs alle aktualisiert sind
-    }
-  }
-}
-
 void rainbow(int wait) {
   for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
     for (int i = 0; i < MAXLED; i++) {
       int pixelHue = firstPixelHue + (i * 65536L / led.numPixels());
       led.setPixelColor(i, led.gamma32(led.ColorHSV(pixelHue)));
     }
-    if(change == 1){
     led.show();
-    }
     delay(wait);
     break;
   }
+}
+
+void led1(){
+  for(int i = 0; i < MAXLED; i++){
+    led.setPixelColor(i,led.Color(0,255,0));
+  }
+  led.show();
+}
+void led2(){
+  for(int i = 0; i < MAXLED; i++){
+    led.setPixelColor(i,led.Color(50,255,200));
+  }
+  led.show();
+}
+void led3(){
+  for(int i = 0; i < MAXLED; i++){
+    led.setPixelColor(i,led.Color(0,0,255));
+  }
+  led.show();
 }
