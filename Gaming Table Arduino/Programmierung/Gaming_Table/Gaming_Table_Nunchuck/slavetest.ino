@@ -8,7 +8,7 @@ werden.*/
 #include "MusikVariablen.h"
 
 int string Color;
-int change = 0;  // Veränderung Status speichern
+int change = 1;  // Veränderung Status speichern
 int done = 0; // Aktualisierung LEDs abschließen
 int MAXLED = 140;
 int LED_PIN = 6;
@@ -69,8 +69,7 @@ void select_music() {
   if (selct == 0) {
     mario_theme();
     // LED_Breathe_Red();
-    Color = "Red";
-    ledcolor();
+    rainbow(1);
   }
   // Race Game Musik und Farbe
   if (selct == 1) {
@@ -384,5 +383,19 @@ void ledcolor() {
       led.show();
       done = 1; //While Loop schließen wenn LEDs alle aktualisiert sind
     }
+  }
+}
+
+void rainbow(int wait) {
+  for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
+    for (int i = 0; i < MAXLED; i++) {
+      int pixelHue = firstPixelHue + (i * 65536L / led.numPixels());
+      led.setPixelColor(i, led.gamma32(led.ColorHSV(pixelHue)));
+    }
+    if(change == 1){
+    led.show();
+    }
+    delay(wait);
+    break;
   }
 }
